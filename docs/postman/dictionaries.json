@@ -1,0 +1,20 @@
+[
+  {
+    "code": "COUNTRY",
+    "name": "Страны",
+    "description": "Справочник стран",
+    "active": true
+  },
+  {
+    "code": "CURRENCY",
+    "name": "Валюты",
+    "description": "Справочник валют",
+    "active": true
+  },
+  {
+    "code": "UNIT",
+    "name": "Единицы измерения",
+    "description": "Справочник единиц измерения",
+    "active": true
+  }
+]

@@ -1,0 +1,355 @@
+{
+  "info": {
+    "name": "Сервис справочников",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Создать справочник COUNTRY",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"COUNTRY\",\n  \"name\": \"Страны\",\n  \"description\": \"Справочник стран\",\n  \"active\": true\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('countryId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать справочник CURRENCY",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"CURRENCY\",\n  \"name\": \"Валюты\",\n  \"description\": \"Справочник валют\",\n  \"active\": true\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('currencyId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Создать справочник UNIT",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"UNIT\",\n  \"name\": \"Единицы измерения\",\n  \"description\": \"Справочник единиц измерения\",\n  \"active\": true\n}"
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.collectionVariables.set('unitId', pm.response.json().id);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Элемент COUNTRY/RU",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"RU\",\n  \"name\": \"Россия\",\n  \"description\": \"Российская Федерация\",\n  \"sortOrder\": 1,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент COUNTRY/BY",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"BY\",\n  \"name\": \"Беларусь\",\n  \"description\": \"Республика Беларусь\",\n  \"sortOrder\": 2,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент COUNTRY/KZ",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"KZ\",\n  \"name\": \"Казахстан\",\n  \"description\": \"Республика Казахстан\",\n  \"sortOrder\": 3,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент COUNTRY/DE",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"DE\",\n  \"name\": \"Германия\",\n  \"description\": \"Федеративная Республика Германия\",\n  \"sortOrder\": 4,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент CURRENCY/RUB",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{currencyId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"RUB\",\n  \"name\": \"Российский рубль\",\n  \"description\": \"Валюта РФ\",\n  \"sortOrder\": 1,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент CURRENCY/USD",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{currencyId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"USD\",\n  \"name\": \"Доллар США\",\n  \"description\": \"Валюта США\",\n  \"sortOrder\": 2,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент CURRENCY/EUR",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{currencyId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"EUR\",\n  \"name\": \"Евро\",\n  \"description\": \"Валюта еврозоны\",\n  \"sortOrder\": 3,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент UNIT/PCS",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{unitId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"PCS\",\n  \"name\": \"Штука\",\n  \"description\": \"Количество в штуках\",\n  \"sortOrder\": 1,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент UNIT/KG",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{unitId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"KG\",\n  \"name\": \"Килограмм\",\n  \"description\": \"Масса\",\n  \"sortOrder\": 2,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент UNIT/L",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{unitId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"L\",\n  \"name\": \"Литр\",\n  \"description\": \"Объём\",\n  \"sortOrder\": 3,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Элемент UNIT/M",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{unitId}}/items"
+        },
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"code\": \"M\",\n  \"name\": \"Метр\",\n  \"description\": \"Длина\",\n  \"sortOrder\": 4,\n  \"active\": true\n}"
+        }
+      }
+    },
+    {
+      "name": "Список справочников",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries"
+        }
+      }
+    },
+    {
+      "name": "Элементы справочника COUNTRY",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
+        }
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "countryId",
+      "value": ""
+    },
+    {
+      "key": "currencyId",
+      "value": ""
+    },
+    {
+      "key": "unitId",
+      "value": ""
+    }
+  ]
+}

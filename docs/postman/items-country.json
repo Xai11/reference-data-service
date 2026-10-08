@@ -1,0 +1,30 @@
+[
+  {
+    "code": "RU",
+    "name": "Россия",
+    "description": "Российская Федерация",
+    "sortOrder": 1,
+    "active": true
+  },
+  {
+    "code": "BY",
+    "name": "Беларусь",
+    "description": "Республика Беларусь",
+    "sortOrder": 2,
+    "active": true
+  },
+  {
+    "code": "KZ",
+    "name": "Казахстан",
+    "description": "Республика Казахстан",
+    "sortOrder": 3,
+    "active": true
+  },
+  {
+    "code": "DE",
+    "name": "Германия",
+    "description": "Федеративная Республика Германия",
+    "sortOrder": 4,
+    "active": true
+  }
+]

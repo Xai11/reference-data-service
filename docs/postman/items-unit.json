@@ -1,0 +1,30 @@
+[
+  {
+    "code": "PCS",
+    "name": "Штука",
+    "description": "Количество в штуках",
+    "sortOrder": 1,
+    "active": true
+  },
+  {
+    "code": "KG",
+    "name": "Килограмм",
+    "description": "Масса",
+    "sortOrder": 2,
+    "active": true
+  },
+  {
+    "code": "L",
+    "name": "Литр",
+    "description": "Объём",
+    "sortOrder": 3,
+    "active": true
+  },
+  {
+    "code": "M",
+    "name": "Метр",
+    "description": "Длина",
+    "sortOrder": 4,
+    "active": true
+  }
+]

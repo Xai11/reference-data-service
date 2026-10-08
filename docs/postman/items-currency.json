@@ -1,0 +1,23 @@
+[
+  {
+    "code": "RUB",
+    "name": "Российский рубль",
+    "description": "Валюта РФ",
+    "sortOrder": 1,
+    "active": true
+  },
+  {
+    "code": "USD",
+    "name": "Доллар США",
+    "description": "Валюта США",
+    "sortOrder": 2,
+    "active": true
+  },
+  {
+    "code": "EUR",
+    "name": "Евро",
+    "description": "Валюта еврозоны",
+    "sortOrder": 3,
+    "active": true
+  }
+]
