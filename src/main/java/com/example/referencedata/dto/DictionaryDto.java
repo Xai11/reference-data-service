@@ -9,11 +9,12 @@ public record DictionaryDto(
         @NotBlank @Size(max = 100) String code,
         @NotBlank @Size(max = 255) String name,
         @Size(max = 1000) String description,
-        boolean active) {
+        boolean active,
+        boolean hierarchical) {
 
     public static DictionaryDto from(Dictionary entity) {
         return new DictionaryDto(entity.getId(), entity.getCode(), entity.getName(),
-                entity.getDescription(), entity.isActive());
+                entity.getDescription(), entity.isActive(), entity.isHierarchical());
     }
 
     public Dictionary toEntity() {
@@ -22,6 +23,7 @@ public record DictionaryDto(
         entity.setName(name);
         entity.setDescription(description);
         entity.setActive(active);
+        entity.setHierarchical(hierarchical);
         return entity;
     }
 }

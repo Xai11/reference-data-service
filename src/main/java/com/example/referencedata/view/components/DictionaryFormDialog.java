@@ -1,5 +1,6 @@
 package com.example.referencedata.view.components;
 
+import com.example.referencedata.exception.ConflictException;
 import com.example.referencedata.exception.DuplicateCodeException;
 import com.example.referencedata.model.Dictionary;
 import com.example.referencedata.service.DictionaryService;
@@ -8,6 +9,8 @@ import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.checkbox.Checkbox;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.formlayout.FormLayout;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
@@ -21,6 +24,7 @@ public class DictionaryFormDialog extends Dialog {
     private final TextField name = new TextField("Название");
     private final TextArea description = new TextArea("Описание");
     private final Checkbox active = new Checkbox("Активен");
+    private final Checkbox hierarchical = new Checkbox("Иерархический (элементы могут иметь родителя)");
 
     private final BeanValidationBinder<Dictionary> binder = new BeanValidationBinder<>(Dictionary.class);
     private final Dictionary bean = new Dictionary();
@@ -37,6 +41,7 @@ public class DictionaryFormDialog extends Dialog {
             bean.setName(existing.getName());
             bean.setDescription(existing.getDescription());
             bean.setActive(existing.isActive());
+            bean.setHierarchical(existing.isHierarchical());
         }
 
         code.setMaxLength(100);
@@ -48,10 +53,12 @@ public class DictionaryFormDialog extends Dialog {
         binder.forField(name).asRequired("Укажите название").bind("name");
         binder.forField(description).bind("description");
         binder.forField(active).bind("active");
+        binder.forField(hierarchical).bind("hierarchical");
         binder.readBean(bean);
 
-        FormLayout form = new FormLayout(code, name, description, active);
+        FormLayout form = new FormLayout(code, name, description, active, hierarchical);
         form.setColspan(description, 2);
+        form.setColspan(hierarchical, 2);
         form.setResponsiveSteps(new FormLayout.ResponsiveStep("0", 1), new FormLayout.ResponsiveStep("30rem", 2));
         add(form);
 
@@ -74,6 +81,9 @@ public class DictionaryFormDialog extends Dialog {
         } catch (DuplicateCodeException e) {
             code.setInvalid(true);
             code.setErrorMessage("Справочник с таким кодом уже существует");
+        } catch (ConflictException e) {
+            Notification.show(e.getMessage(), 5000, Notification.Position.TOP_CENTER)
+                    .addThemeVariants(NotificationVariant.LUMO_ERROR);
         }
     }
 }

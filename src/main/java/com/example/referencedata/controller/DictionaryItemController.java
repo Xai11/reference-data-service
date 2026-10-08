@@ -3,6 +3,8 @@ package com.example.referencedata.controller;
 import com.example.referencedata.dto.DictionaryItemDto;
 import com.example.referencedata.service.DictionaryItemService;
 import jakarta.validation.Valid;
+import com.example.referencedata.service.ItemTree;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -29,8 +32,15 @@ public class DictionaryItemController {
 
     @GetMapping("/dictionaries/{dictionaryId}/items")
     public List<DictionaryItemDto> list(@PathVariable Long dictionaryId,
-                                        @RequestParam(defaultValue = "false") boolean onlyActive) {
-        return service.findByDictionary(dictionaryId, onlyActive).stream()
+                                        @RequestParam(defaultValue = "false") boolean onlyActive,
+                                        @RequestParam(required = false)
+                                        @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate asOf,
+                                        @RequestParam(defaultValue = "false") boolean tree) {
+        if (tree) {
+            return service.findTree(dictionaryId, onlyActive, asOf).stream()
+                    .map((ItemTree.Node n) -> DictionaryItemDto.from(n.item(), n.level())).toList();
+        }
+        return service.findByDictionary(dictionaryId, onlyActive, asOf).stream()
                 .map(DictionaryItemDto::from).toList();
     }
 
@@ -43,7 +53,7 @@ public class DictionaryItemController {
     @ResponseStatus(HttpStatus.CREATED)
     public DictionaryItemDto create(@PathVariable Long dictionaryId,
                                     @Valid @RequestBody DictionaryItemDto dto) {
-        return DictionaryItemDto.from(service.create(dictionaryId, dto.toEntity()));
+        return DictionaryItemDto.from(service.create(dictionaryId, dto.toEntity(), dto.parentId(), dto.attributes()));
     }
 
     @GetMapping("/items/{id}")
@@ -53,7 +63,7 @@ public class DictionaryItemController {
 
     @PutMapping("/items/{id}")
     public DictionaryItemDto update(@PathVariable Long id, @Valid @RequestBody DictionaryItemDto dto) {
-        return DictionaryItemDto.from(service.update(id, dto.toEntity()));
+        return DictionaryItemDto.from(service.update(id, dto.toEntity(), dto.parentId(), dto.attributes()));
     }
 
     @DeleteMapping("/items/{id}")

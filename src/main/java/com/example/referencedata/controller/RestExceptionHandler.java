@@ -1,6 +1,8 @@
 package com.example.referencedata.controller;
 
+import com.example.referencedata.exception.ConflictException;
 import com.example.referencedata.exception.DuplicateCodeException;
+import com.example.referencedata.exception.InvalidDataException;
 import com.example.referencedata.exception.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -20,6 +22,16 @@ public class RestExceptionHandler {
     @ExceptionHandler(DuplicateCodeException.class)
     public ProblemDetail handleDuplicate(DuplicateCodeException e) {
         return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(ConflictException.class)
+    public ProblemDetail handleConflict(ConflictException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, e.getMessage());
+    }
+
+    @ExceptionHandler(InvalidDataException.class)
+    public ProblemDetail handleInvalid(InvalidDataException e) {
+        return ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler(AccessDeniedException.class)

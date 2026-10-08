@@ -143,3 +143,18 @@ vaadin-grid {
     display: none;
   }
 }
+
+.items-toolbar {
+  gap: var(--lumo-space-m);
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: var(--lumo-space-s);
+}
+
+.items-toolbar vaadin-text-field {
+  flex: 1 1 14rem;
+}
+
+.items-toolbar vaadin-date-picker {
+  flex: 0 1 12rem;
+}
