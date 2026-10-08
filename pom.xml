@@ -22,6 +22,7 @@
         <vaadin.version>24.8.0</vaadin.version>
         <eclipselink.version>4.0.5</eclipselink.version>
         <openpdf.version>2.0.3</openpdf.version>
+        <karibu.version>2.5.0</karibu.version>
         <springdoc.version>2.8.9</springdoc.version>
     </properties>
 
@@ -139,6 +140,18 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mvysny.kaributesting</groupId>
+            <artifactId>karibu-testing-v24</artifactId>
+            <version>${karibu.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.mvysny.kaributesting</groupId>
+            <artifactId>karibu-testing-v10-spring</artifactId>
+            <version>${karibu.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
