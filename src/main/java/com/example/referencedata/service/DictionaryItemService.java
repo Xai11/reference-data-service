@@ -5,6 +5,7 @@ import com.example.referencedata.exception.NotFoundException;
 import com.example.referencedata.model.Dictionary;
 import com.example.referencedata.model.DictionaryItem;
 import com.example.referencedata.repository.DictionaryItemRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +42,7 @@ public class DictionaryItemService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public DictionaryItem create(Long dictionaryId, DictionaryItem item) {
         Dictionary dictionary = dictionaryService.getById(dictionaryId);
         if (repository.existsByDictionaryIdAndCode(dictionaryId, item.getCode())) {
@@ -52,6 +54,7 @@ public class DictionaryItemService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public DictionaryItem update(Long id, DictionaryItem changes) {
         DictionaryItem existing = getById(id);
         Long dictionaryId = existing.getDictionary().getId();
@@ -68,6 +71,7 @@ public class DictionaryItemService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public void delete(Long id) {
         repository.delete(getById(id));
     }

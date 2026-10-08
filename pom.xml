@@ -78,6 +78,12 @@
             <artifactId>vaadin-spring-boot-starter</artifactId>
         </dependency>
 
+        <!-- Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <!-- Migrations -->
         <dependency>
             <groupId>org.flywaydb</groupId>

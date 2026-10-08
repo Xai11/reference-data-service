@@ -4,6 +4,7 @@ import com.example.referencedata.exception.DuplicateCodeException;
 import com.example.referencedata.exception.NotFoundException;
 import com.example.referencedata.model.Dictionary;
 import com.example.referencedata.repository.DictionaryRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,6 +43,7 @@ public class DictionaryService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public Dictionary create(Dictionary dictionary) {
         if (repository.existsByCode(dictionary.getCode())) {
             throw new DuplicateCodeException("Справочник с кодом уже существует: " + dictionary.getCode());
@@ -51,6 +53,7 @@ public class DictionaryService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public Dictionary update(Long id, Dictionary changes) {
         Dictionary existing = getById(id);
         if (!existing.getCode().equals(changes.getCode()) && repository.existsByCode(changes.getCode())) {
@@ -64,6 +67,7 @@ public class DictionaryService {
     }
 
     @Transactional
+    @PreAuthorize("hasRole('EDITOR')")
     public void delete(Long id) {
         repository.delete(getById(id));
     }
