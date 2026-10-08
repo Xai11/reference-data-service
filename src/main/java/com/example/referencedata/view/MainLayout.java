@@ -2,14 +2,22 @@ package com.example.referencedata.view;
 
 import com.example.referencedata.model.Dictionary;
 import com.example.referencedata.service.DictionaryService;
+import com.example.referencedata.security.SecurityUtils;
+import com.example.referencedata.view.components.DictionaryChangedEvent;
+import com.example.referencedata.view.components.DictionaryFormDialog;
 import com.vaadin.flow.component.AttachEvent;
+import com.vaadin.flow.component.ComponentUtil;
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.notification.Notification;
+import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -19,6 +27,8 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.AfterNavigationEvent;
 import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.shared.Registration;
+import com.vaadin.flow.spring.security.AuthenticationContext;
 import com.vaadin.flow.theme.lumo.Lumo;
 
 import java.util.Locale;
@@ -31,9 +41,12 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
     private final SideNav nav = new SideNav();
     private final TextField search = new TextField();
     private final Button themeToggle = new Button();
+    private final AuthenticationContext authenticationContext;
+    private Registration changeRegistration;
 
-    public MainLayout(DictionaryService dictionaryService) {
+    public MainLayout(DictionaryService dictionaryService, AuthenticationContext authenticationContext) {
         this.dictionaryService = dictionaryService;
+        this.authenticationContext = authenticationContext;
 
         setPrimarySection(Section.DRAWER);
 
@@ -44,7 +57,13 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         themeToggle.getElement().setAttribute("aria-label", "Переключить тему");
         themeToggle.addClickListener(e -> applyTheme(!isDark(), true));
 
-        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), title, themeToggle);
+        Span user = new Span(authenticationContext.getPrincipalName().orElse(""));
+        user.addClassNames("muted", "user-name");
+        Button logout = new Button(VaadinIcon.SIGN_OUT.create(), e -> authenticationContext.logout());
+        logout.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
+        logout.getElement().setAttribute("aria-label", "Выйти");
+
+        HorizontalLayout header = new HorizontalLayout(new DrawerToggle(), title, user, themeToggle, logout);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(title);
         header.setWidthFull();
@@ -60,6 +79,12 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
         search.addValueChangeListener(e -> refreshNav());
 
         VerticalLayout drawer = new VerticalLayout(search, nav);
+        if (SecurityUtils.isEditor()) {
+            Button create = new Button("Новый справочник", VaadinIcon.PLUS.create(), e -> openCreateDialog());
+            create.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+            create.setWidthFull();
+            drawer.addComponentAsFirst(create);
+        }
         drawer.addClassName("app-drawer");
         drawer.setPadding(false);
         addToDrawer(drawer);
@@ -70,10 +95,28 @@ public class MainLayout extends AppLayout implements AfterNavigationObserver {
     @Override
     protected void onAttach(AttachEvent event) {
         super.onAttach(event);
+        changeRegistration = ComponentUtil.addListener(event.getUI(), DictionaryChangedEvent.class, e -> refreshNav());
         UI.getCurrent().getPage()
                 .executeJs("return localStorage.getItem($0) || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')",
                         THEME_KEY)
                 .then(String.class, theme -> applyTheme("dark".equals(theme), false));
+    }
+
+    @Override
+    protected void onDetach(DetachEvent event) {
+        if (changeRegistration != null) {
+            changeRegistration.remove();
+        }
+        super.onDetach(event);
+    }
+
+    private void openCreateDialog() {
+        new DictionaryFormDialog(null, dictionaryService, saved -> {
+            Notification.show("Справочник создан", 3000, Notification.Position.TOP_CENTER)
+                    .addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+            DictionaryChangedEvent.fire(UI.getCurrent());
+            UI.getCurrent().navigate("dictionary/" + saved.getCode());
+        }).open();
     }
 
     @Override
