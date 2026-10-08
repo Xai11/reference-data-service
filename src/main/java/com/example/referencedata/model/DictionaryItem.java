@@ -1,5 +1,6 @@
 package com.example.referencedata.model;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -8,10 +9,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
+
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "dictionary_item",
@@ -46,6 +54,20 @@ public class DictionaryItem {
     @Column(nullable = false)
     private boolean active = true;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private DictionaryItem parent;
+
+    @Column(name = "valid_from")
+    private LocalDate validFrom;
+
+    @Column(name = "valid_to")
+    private LocalDate validTo;
+
+    @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @BatchFetch(BatchFetchType.IN)
+    private List<DictionaryItemValue> values = new ArrayList<>();
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -66,4 +88,20 @@ public class DictionaryItem {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public DictionaryItem getParent() { return parent; }
+    public void setParent(DictionaryItem parent) { this.parent = parent; }
+
+    public LocalDate getValidFrom() { return validFrom; }
+    public void setValidFrom(LocalDate validFrom) { this.validFrom = validFrom; }
+
+    public LocalDate getValidTo() { return validTo; }
+    public void setValidTo(LocalDate validTo) { this.validTo = validTo; }
+
+    public List<DictionaryItemValue> getValues() { return values; }
+    public void setValues(List<DictionaryItemValue> values) { this.values = values; }
+
+    public Long getParentId() { return parent == null ? null : parent.getId(); }
+
+    public ItemStatus statusOn(LocalDate date) { return ItemStatus.of(this, date); }
 }

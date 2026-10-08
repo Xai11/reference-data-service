@@ -1,6 +1,7 @@
 package com.example.referencedata.model;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -11,6 +12,9 @@ import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
+import org.eclipse.persistence.annotations.BatchFetch;
+import org.eclipse.persistence.annotations.BatchFetchType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,9 +44,17 @@ public class Dictionary {
     @Column(nullable = false)
     private boolean active = true;
 
+    @Column(nullable = false)
+    private boolean hierarchical;
+
     @OneToMany(mappedBy = "dictionary", cascade = CascadeType.ALL, orphanRemoval = true)
     @OrderBy("sortOrder ASC, name ASC")
     private List<DictionaryItem> items = new ArrayList<>();
+
+    @OneToMany(mappedBy = "dictionary", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    @BatchFetch(BatchFetchType.IN)
+    @OrderBy("sortOrder ASC, name ASC")
+    private List<DictionaryAttribute> attributes = new ArrayList<>();
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -58,6 +70,12 @@ public class Dictionary {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public boolean isHierarchical() { return hierarchical; }
+    public void setHierarchical(boolean hierarchical) { this.hierarchical = hierarchical; }
+
+    public List<DictionaryAttribute> getAttributes() { return attributes; }
+    public void setAttributes(List<DictionaryAttribute> attributes) { this.attributes = attributes; }
 
     public List<DictionaryItem> getItems() { return items; }
     public void setItems(List<DictionaryItem> items) { this.items = items; }
