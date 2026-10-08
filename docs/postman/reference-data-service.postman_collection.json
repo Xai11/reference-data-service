@@ -332,6 +332,173 @@
           "raw": "{{baseUrl}}/api/dictionaries/{{countryId}}/items"
         }
       }
+    },
+    {
+      "name": "Расширенные возможности",
+      "item": [
+        {
+          "name": "Создать иерархический справочник REGION",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"REGION\",\n  \"name\": \"Регионы\",\n  \"description\": \"Административное деление\",\n  \"active\": true,\n  \"hierarchical\": true\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('regionId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Атрибут population (число)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/attributes"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"population\",\n  \"name\": \"Население\",\n  \"type\": \"NUMBER\",\n  \"required\": false,\n  \"sortOrder\": 1\n}"
+            }
+          }
+        },
+        {
+          "name": "Атрибут country (ссылка на COUNTRY)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/attributes"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"country\",\n  \"name\": \"Страна\",\n  \"type\": \"REFERENCE\",\n  \"required\": false,\n  \"sortOrder\": 2,\n  \"refDictionaryId\": \"{{countryId}}\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Корневой элемент MSK",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/items"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"MSK\",\n  \"name\": \"Москва\",\n  \"sortOrder\": 1,\n  \"active\": true,\n  \"attributes\": {\n    \"population\": 13000000,\n    \"country\": \"RU\"\n  }\n}"
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set('mskId', pm.response.json().id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Дочерний элемент ZEL (с периодом действия)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/items"
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"code\": \"ZEL\",\n  \"name\": \"Зеленоград\",\n  \"sortOrder\": 2,\n  \"active\": true,\n  \"parentId\": \"{{mskId}}\",\n  \"validFrom\": \"2026-01-01\",\n  \"validTo\": \"2030-12-31\",\n  \"attributes\": {\n    \"population\": 250000\n  }\n}"
+            }
+          }
+        },
+        {
+          "name": "Дерево элементов",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/items?tree=true"
+            }
+          }
+        },
+        {
+          "name": "Элементы, актуальные на дату",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/items?asOf=2031-06-01"
+            }
+          }
+        },
+        {
+          "name": "Список атрибутов",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/dictionaries/{{regionId}}/attributes"
+            }
+          }
+        }
+      ]
     }
   ],
   "variable": [
@@ -358,6 +525,14 @@
     {
       "key": "password",
       "value": "change-me"
+    },
+    {
+      "key": "regionId",
+      "value": ""
+    },
+    {
+      "key": "mskId",
+      "value": ""
     }
   ],
   "auth": {
