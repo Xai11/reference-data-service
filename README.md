@@ -43,3 +43,17 @@ mvn spring-boot:run
 ```
 
 Приложение: http://localhost:8080
+
+## Авторизация и документация API
+
+- При первом старте создаётся администратор (роль `EDITOR`): логин `APP_ADMIN_USERNAME` (по умолчанию `admin`),
+  пароль `APP_ADMIN_PASSWORD`. Если пароль не задан, он генерируется и выводится в лог (`WARN`).
+- Роли: `VIEWER` — только чтение, `EDITOR` — чтение и изменение. Других пользователей пока добавляйте в таблицу
+  `app_user` вручную (пароль — BCrypt-хеш).
+- REST API (`/api/**`) использует HTTP Basic; интерфейс — форму входа `/login`.
+- Swagger UI: http://localhost:8080/swagger-ui.html
+
+## Миграции БД
+
+Схема управляется Flyway (`src/main/resources/db/migration`). Для БД, созданной ранее EclipseLink, включён
+`baseline-on-migrate`: существующие таблицы принимаются за версию 1, применяются только новые миграции.
